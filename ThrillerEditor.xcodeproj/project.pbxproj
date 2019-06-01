@@ -11,7 +11,36 @@
 		9C8A2A6E229EE27E00F58E80 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8A2A6D229EE27E00F58E80 /* ViewController.swift */; };
 		9C8A2A70229EE27F00F58E80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C8A2A6F229EE27F00F58E80 /* Assets.xcassets */; };
 		9C8A2A73229EE27F00F58E80 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C8A2A71229EE27F00F58E80 /* Main.storyboard */; };
+		9C9E34CF22A2BDD700DBF176 /* EditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E34CE22A2BDD700DBF176 /* EditorController.swift */; };
+		9CEA95F022A0310300ACCE44 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C8A2A81229EE28D00F58E80 /* Cocoa.framework */; };
+		9CEA95F322A0310300ACCE44 /* SourceEditorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEA95F222A0310300ACCE44 /* SourceEditorExtension.swift */; };
+		9CEA95F522A0310300ACCE44 /* SourceEditorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEA95F422A0310300ACCE44 /* SourceEditorCommand.swift */; };
+		9CEA95FA22A0310300ACCE44 /* Editor.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CEA95EF22A0310300ACCE44 /* Editor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9CEA95F822A0310300ACCE44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9C8A2A60229EE27E00F58E80 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9CEA95EE22A0310300ACCE44;
+			remoteInfo = Editor;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9C8A2A90229EE28D00F58E80 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				9CEA95FA22A0310300ACCE44 /* Editor.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9C8A2A68229EE27E00F58E80 /* ThrillerEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThrillerEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -21,6 +50,13 @@
 		9C8A2A72229EE27F00F58E80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9C8A2A74229EE27F00F58E80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C8A2A75229EE27F00F58E80 /* ThrillerEditor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ThrillerEditor.entitlements; sourceTree = "<group>"; };
+		9C8A2A81229EE28D00F58E80 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		9C9E34CE22A2BDD700DBF176 /* EditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorController.swift; sourceTree = "<group>"; };
+		9CEA95EF22A0310300ACCE44 /* Editor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Editor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CEA95F222A0310300ACCE44 /* SourceEditorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceEditorExtension.swift; sourceTree = "<group>"; };
+		9CEA95F422A0310300ACCE44 /* SourceEditorCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceEditorCommand.swift; sourceTree = "<group>"; };
+		9CEA95F622A0310300ACCE44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9CEA95F722A0310300ACCE44 /* Editor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Editor.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +67,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9CEA95EC22A0310300ACCE44 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9CEA95F022A0310300ACCE44 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -38,6 +82,8 @@
 			isa = PBXGroup;
 			children = (
 				9C8A2A6A229EE27E00F58E80 /* ThrillerEditor */,
+				9CEA95F122A0310300ACCE44 /* Editor */,
+				9C8A2A80229EE28D00F58E80 /* Frameworks */,
 				9C8A2A69229EE27E00F58E80 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				9C8A2A68229EE27E00F58E80 /* ThrillerEditor.app */,
+				9CEA95EF22A0310300ACCE44 /* Editor.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -63,6 +110,26 @@
 			path = ThrillerEditor;
 			sourceTree = "<group>";
 		};
+		9C8A2A80229EE28D00F58E80 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9C8A2A81229EE28D00F58E80 /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9CEA95F122A0310300ACCE44 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				9CEA95F222A0310300ACCE44 /* SourceEditorExtension.swift */,
+				9CEA95F422A0310300ACCE44 /* SourceEditorCommand.swift */,
+				9C9E34CE22A2BDD700DBF176 /* EditorController.swift */,
+				9CEA95F622A0310300ACCE44 /* Info.plist */,
+				9CEA95F722A0310300ACCE44 /* Editor.entitlements */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -73,15 +140,34 @@
 				9C8A2A64229EE27E00F58E80 /* Sources */,
 				9C8A2A65229EE27E00F58E80 /* Frameworks */,
 				9C8A2A66229EE27E00F58E80 /* Resources */,
+				9C8A2A90229EE28D00F58E80 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				9CEA95F922A0310300ACCE44 /* PBXTargetDependency */,
 			);
 			name = ThrillerEditor;
 			productName = ThrillerEditor;
 			productReference = 9C8A2A68229EE27E00F58E80 /* ThrillerEditor.app */;
 			productType = "com.apple.product-type.application";
+		};
+		9CEA95EE22A0310300ACCE44 /* Editor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9CEA95FB22A0310300ACCE44 /* Build configuration list for PBXNativeTarget "Editor" */;
+			buildPhases = (
+				9CEA95EB22A0310300ACCE44 /* Sources */,
+				9CEA95EC22A0310300ACCE44 /* Frameworks */,
+				9CEA95ED22A0310300ACCE44 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Editor;
+			productName = Editor;
+			productReference = 9CEA95EF22A0310300ACCE44 /* Editor.appex */;
+			productType = "com.apple.product-type.xcode-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -94,6 +180,9 @@
 				ORGANIZATIONNAME = Thriller;
 				TargetAttributes = {
 					9C8A2A67229EE27E00F58E80 = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+					9CEA95EE22A0310300ACCE44 = {
 						CreatedOnToolsVersion = 10.2.1;
 					};
 				};
@@ -112,6 +201,7 @@
 			projectRoot = "";
 			targets = (
 				9C8A2A67229EE27E00F58E80 /* ThrillerEditor */,
+				9CEA95EE22A0310300ACCE44 /* Editor */,
 			);
 		};
 /* End PBXProject section */
@@ -123,6 +213,13 @@
 			files = (
 				9C8A2A70229EE27F00F58E80 /* Assets.xcassets in Resources */,
 				9C8A2A73229EE27F00F58E80 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CEA95ED22A0310300ACCE44 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,7 +235,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9CEA95EB22A0310300ACCE44 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9CEA95F322A0310300ACCE44 /* SourceEditorExtension.swift in Sources */,
+				9C9E34CF22A2BDD700DBF176 /* EditorController.swift in Sources */,
+				9CEA95F522A0310300ACCE44 /* SourceEditorCommand.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9CEA95F922A0310300ACCE44 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9CEA95EE22A0310300ACCE44 /* Editor */;
+			targetProxy = 9CEA95F822A0310300ACCE44 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9C8A2A71229EE27F00F58E80 /* Main.storyboard */ = {
@@ -270,18 +385,22 @@
 		9C8A2A79229EE27F00F58E80 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ThrillerEditor/ThrillerEditor.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = TF7FZ78YUT;
+				DEVELOPMENT_TEAM = U3EJ4CGDAU;
 				INFOPLIST_FILE = ThrillerEditor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thriller.ThrillerEditor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -289,18 +408,68 @@
 		9C8A2A7A229EE27F00F58E80 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ThrillerEditor/ThrillerEditor.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = TF7FZ78YUT;
+				DEVELOPMENT_TEAM = U3EJ4CGDAU;
 				INFOPLIST_FILE = ThrillerEditor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thriller.ThrillerEditor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		9CEA95FC22A0310300ACCE44 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Editor/Editor.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = U3EJ4CGDAU;
+				INFOPLIST_FILE = Editor/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thriller.ThrillerEditor.Editor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		9CEA95FD22A0310300ACCE44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Editor/Editor.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = U3EJ4CGDAU;
+				INFOPLIST_FILE = Editor/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thriller.ThrillerEditor.Editor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -322,6 +491,15 @@
 			buildConfigurations = (
 				9C8A2A79229EE27F00F58E80 /* Debug */,
 				9C8A2A7A229EE27F00F58E80 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9CEA95FB22A0310300ACCE44 /* Build configuration list for PBXNativeTarget "Editor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9CEA95FC22A0310300ACCE44 /* Debug */,
+				9CEA95FD22A0310300ACCE44 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
