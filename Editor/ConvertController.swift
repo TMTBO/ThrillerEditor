@@ -22,17 +22,65 @@ struct ConvertController {
     internal static func convertJson(with invocation: XCSourceEditorCommandInvocation,
                                      at textRange: XCSourceTextRange) {
         
+        /// handle json string
+        func _handleJsonString(with invocation: XCSourceEditorCommandInvocation,
+                               json: String) -> Bool {
+            let jsonString = json.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            // convert to collection object
+            guard let jsonData = jsonString.data(using: .utf8),
+                let obj = try? JSONSerialization.jsonObject(with: jsonData, options: [.mutableContainers, .mutableLeaves]) else { return false }
+            let insertLine = invocation.buffer.lines.count
+            var handled = false
+            
+            // convert to model
+            if let dict = obj as? Dictionary<NSString, AnyObject> {
+                // class interface
+                var interfaceString = "\n@interface \(Const.className.rawValue) : NSObject\n\n"
+                // properties
+                interfaceString = dict.reduce(interfaceString) { (result, item) -> String in
+                    return result.appending(_generateProperty(key: item.key, value: item.value))
+                }
+                // methods
+                interfaceString.append("\n\(Const.classDictMehtod.rawValue);\n\n\(Const.instanceDictMethod.rawValue);\n")
+                // class end
+                interfaceString.append("\n@end")
+                // insert class
+                invocation.buffer.lines.insert(interfaceString, at: insertLine)
+                
+                // handled
+                handled = true
+            } else if obj is Array<Any> {
+                // warning
+                let warning = "\n+-------------------------------------------------+\n|    WARNING: The selected must be `Dictionary`   +\n+-------------------------------------------------+\n"
+                // insert
+                invocation.buffer.lines.insert(warning, at: insertLine)
+                
+                // handled
+                handled = true
+            }
+            
+            // select lines
+            let start = XCSourceTextPosition(line: insertLine, column: 0)
+            let end = XCSourceTextPosition(line: invocation.buffer.lines.count, column: 0)
+            let range = XCSourceTextRange(start: start, end: end)
+            LinesController.selectLines(with: invocation, range: range)
+            
+            return handled
+        }
+        
+        /// convert from selection
         func _convertFromSelection(with invocation: XCSourceEditorCommandInvocation,
                                    at textRange: XCSourceTextRange) -> Bool {
             
-            // from selection
             // get selected string
             let lineRange = Range(uncheckedBounds: (textRange.start.line, min(textRange.end.line + 1, invocation.buffer.lines.count)))
             let indexSet = IndexSet(integersIn: lineRange)
             guard var selectedLines = invocation
                 .buffer
                 .lines
-                .objects(at: indexSet) as? [String] else { return false }
+                .objects(at: indexSet) as? [String],
+                selectedLines.count > 0 else { return false }
             
             // get first and last to correct column
             let firstString = selectedLines.first ?? ""
@@ -43,53 +91,30 @@ struct ConvertController {
             // get json string
             selectedLines[0] = firstLine
             selectedLines[selectedLines.count - 1] = lastLine
-            let selectedString = selectedLines.joined().trimmingCharacters(in: .whitespacesAndNewlines)
+            let selectedString = selectedLines.joined()
             
-            // convert to collection object
-            guard let selectedData = selectedString.data(using: .utf8),
-                let obj = try? JSONSerialization.jsonObject(with: selectedData, options: [.mutableContainers, .mutableLeaves]) else { return false }
+            // handle json
+            return _handleJsonString(with: invocation, json: selectedString)
+        }
+        
+        /// convert form pasteboard
+        func _convertFromPasteboard(with invocation: XCSourceEditorCommandInvocation,
+                                    at textRange: XCSourceTextRange) -> Bool {
             
-            // convert to model
-            if let dict = obj as? Dictionary<NSString, AnyObject> {
-                let insertLine = invocation.buffer.lines.count
-                
-                // class interface
-                var interfaceString = "\n@interface \(Const.className.rawValue) : NSObject\n\n"
-                
-                // properties
-                interfaceString = dict.reduce(interfaceString) { (result, item) -> String in
-                    return result.appending(_generateProperty(key: item.key, value: item.value))
-                }
-                
-                // methods
-                interfaceString.append("\n\(Const.classDictMehtod.rawValue);\n\n\(Const.instanceDictMethod.rawValue);\n")
-                
-                // class end
-                interfaceString.append("\n@end")
-                
-                // insert class
-                invocation.buffer.lines.insert(interfaceString, at: insertLine)
-                
-                // select lines
-                let start = XCSourceTextPosition(line: insertLine, column: 0)
-                let end = XCSourceTextPosition(line: invocation.buffer.lines.count, column: 0)
-                let range = XCSourceTextRange(start: start, end: end)
-                LinesController.selectLines(with: invocation, range: range)
-                return true
-            } else if let array = obj as? Array<Any> {
-                // warning must be a dictionary
-                return true
+            // get copied string
+            guard let copiedString = NSPasteboard.general.string(forType: .string) else {
+                    return false
             }
             
-            return false
+            // handle json
+            return _handleJsonString(with: invocation, json: copiedString)
         }
         
         // from selection
-        // get selected string
         if _convertFromSelection(with: invocation, at: textRange) { return }
         
-        
         // from pasteboard
+        if _convertFromPasteboard(with: invocation, at: textRange) { return }
     }
 }
 
