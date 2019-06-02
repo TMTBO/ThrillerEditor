@@ -16,6 +16,7 @@ struct EditorController {
         case duplicateLines = "Thriller.Editor.DuplicateLines";
         case copyLines = "Thriller.Editor.CopyLines";
         case convertJson = "Thriller.Editor.ConvertJsonToModel";
+        case convertProtobuf = "Thriller.Editor.ConvertProtobufToModel";
         
         // TODO: - sort import <>, "", oc, swift
         // TODO: - auto import anywhere
@@ -30,8 +31,8 @@ struct EditorController {
         // TODO: - format
         
         // TODO: - need comment or not
-        // TODO: - convert json to model
         // TODO: - convert protobuf to model
+        // TODO: - prefix support
     }
     
     /// handle all editor command
@@ -53,6 +54,8 @@ struct EditorController {
             LinesController.copyLines(with: invocation, at: range)
         case .convertJson:
             ConvertController.convertJson(with: invocation, at: textRange)
+        case .convertProtobuf:
+            ConvertController.convertProtobuf(with: invocation, at: textRange)
         }
     }
 }

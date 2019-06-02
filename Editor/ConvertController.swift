@@ -116,6 +116,40 @@ struct ConvertController {
         // from pasteboard
         if _convertFromPasteboard(with: invocation, at: textRange) { return }
     }
+    
+    /// convert protobuf to model
+    internal static func convertProtobuf(with invocation: XCSourceEditorCommandInvocation,
+                                         at textRange: XCSourceTextRange) {
+        
+        // get selected lines
+        let lineRange = Range(uncheckedBounds: (textRange.start.line, min(textRange.end.line + 1, invocation.buffer.lines.count)))
+        let indexSet = IndexSet(integersIn: lineRange)
+        guard let selectedLines = invocation
+            .buffer
+            .lines
+            .objects(at: indexSet) as? [String],
+            selectedLines.count > 0 else { return }
+        
+        let insertLine = invocation.buffer.lines.count
+        
+        // get class name
+        guard let filteredClassName = selectedLines.filter({ $0.hasPrefix("@interface") }).first,
+            filteredClassName.count > 0,
+            let range = filteredClassName.range(of: "@interface +\\S+ +: +PBGeneratedMessage",
+                                                options: .regularExpression,
+                                                range: Range(uncheckedBounds: (filteredClassName.startIndex, filteredClassName.endIndex)),
+                                                locale: nil) else { return }
+        let className = filteredClassName[range]
+        
+        // class interface
+        var interfaceString = "\n@interface \(className) : NSObject\n\n"
+        
+        // class end
+        interfaceString.append("\n@end")
+        
+        invocation.buffer.lines.insert(interfaceString, at: insertLine)
+        
+    }
 }
 
 extension ConvertController {
