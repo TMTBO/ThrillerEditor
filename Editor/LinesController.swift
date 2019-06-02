@@ -57,7 +57,8 @@ struct LinesController {
         guard let selectedLines = invocation
             .buffer
             .lines
-            .objects(at: indexSet) as? [String] else { return }
+            .objects(at: indexSet) as? [String],
+            selectedLines.count > 0 else { return }
         let selectedString = selectedLines.joined().dropLast()
         
         // copy
