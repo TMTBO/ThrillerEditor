@@ -34,7 +34,7 @@
 					<key>XCSourceEditorCommandIdentifier</key>
 					<string>Thriller.Editor.DeleteLines</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>DeleteLines</string>
+					<string>Delete Lines</string>
 				</dict>
 				<dict>
 					<key>XCSourceEditorCommandClassName</key>
@@ -42,7 +42,7 @@
 					<key>XCSourceEditorCommandIdentifier</key>
 					<string>Thriller.Editor.DuplicateLines</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>DuplicateLines</string>
+					<string>Duplicate Lines</string>
 				</dict>
 				<dict>
 					<key>XCSourceEditorCommandClassName</key>
@@ -50,7 +50,7 @@
 					<key>XCSourceEditorCommandIdentifier</key>
 					<string>Thriller.Editor.CopyLines</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>CopyLines</string>
+					<string>Copy Lines</string>
 				</dict>
 			</array>
 			<key>XCSourceEditorExtensionPrincipalClass</key>

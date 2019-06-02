@@ -106,7 +106,7 @@ extension EditorController {
                                          at line: Int) {
         
         // get range
-        let position = XCSourceTextPosition(line: line, column: 0)
+        let position = XCSourceTextPosition(line: line - 1, column: 0)
         let range = XCSourceTextRange(start: position, end: position)
         
         // select lines
