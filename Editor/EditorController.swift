@@ -9,7 +9,7 @@
 import XcodeKit
 import AppKit
 
-class EditorController {
+struct EditorController {
     
     enum EditorCommandIdentifier: String {
         case deleteLines = "Thriller.Editor.DeleteLines";
@@ -17,7 +17,7 @@ class EditorController {
         case copyLines = "Thriller.Editor.CopyLines";
         
         // TODO: - sort import <>, "", oc, swift
-        // TODO: - auto import
+        // TODO: - auto import anywhere
         // TODO: - generate sel interface oc, swift
         // TODO: - generate sel imp with select codes oc, swift
         
@@ -43,98 +43,11 @@ class EditorController {
         
         switch commandIdentifier {
         case .deleteLines:
-            _deleteLines(with: invocation, at: range)
+            LinesController.deleteLines(with: invocation, at: range)
         case .duplicateLines:
-            _duplicateLines(with: invocation, at: range)
+            LinesController.duplicateLines(with: invocation, at: range)
         case .copyLines:
-            _copyLines(with: invocation, at: range)
+            LinesController.copyLines(with: invocation, at: range)
         }
-    }
-}
-
-extension EditorController {
-    
-    /// delete selected lines
-    private static func _deleteLines(with invocation: XCSourceEditorCommandInvocation,
-                                     at range: Range<Int>) {
-        // copy
-        _copyLines(with: invocation, at: range)
-        
-        // delete
-        let indexSet = IndexSet(integersIn: range)
-        invocation.buffer.lines.removeObjects(at: indexSet)
-        
-        // reset selection
-        _resetSelections(with: invocation, at: range.lowerBound)
-    }
-    
-    /// duplicate selected lines
-    private static func _duplicateLines(with invocation: XCSourceEditorCommandInvocation,
-                                        at range: Range<Int>) {
-        
-        // get selected lines
-        let indexSet = IndexSet(integersIn: range)
-        guard let selectedLines = invocation
-            .buffer
-            .lines
-            .objects(at: indexSet) as? [String] else { return }
-        
-        // insert lines
-        invocation.buffer.lines.insert(selectedLines, at: indexSet)
-        
-        // select lines
-        let start = XCSourceTextPosition(line: range.lowerBound + range.count, column: 0)
-        let end = XCSourceTextPosition(line: range.upperBound + range.count - 1,
-                                       column: (selectedLines.last?.count ?? 1) - 1)
-        let range = XCSourceTextRange(start: start, end: end)
-        _selectLines(with: invocation, range: range)
-    }
-    
-    /// copy selected lines
-    private static func _copyLines(with invocation: XCSourceEditorCommandInvocation,
-                                   at range: Range<Int>) {
-
-        // get selected string
-        let indexSet = IndexSet(integersIn: range)
-        guard let selectedLines = invocation
-            .buffer
-            .lines
-            .objects(at: indexSet) as? [String] else { return }
-        let selectedString = selectedLines.joined().dropLast()
-
-        // copy
-        let pastboard = NSPasteboard.general
-        pastboard.declareTypes([.string], owner: nil)
-        pastboard.setString(String(selectedString), forType: .string)
-        
-        // select lines
-        let startPosition = XCSourceTextPosition(line: range.lowerBound, column: 0)
-        let endPosition = XCSourceTextPosition(line: range.upperBound - 1,
-                                               column: (selectedLines.last?.count ?? 1) - 1)
-        let range = XCSourceTextRange(start: startPosition, end: endPosition)
-        _selectLines(with: invocation, range: range)
-    }
-    
-    /// reset the selection at the begining of the selections
-    private static func _resetSelections(with invocation: XCSourceEditorCommandInvocation,
-                                         at line: Int) {
-        
-        // get range
-        let position = XCSourceTextPosition(line: line - 1, column: 0)
-        let range = XCSourceTextRange(start: position, end: position)
-        
-        // select lines
-        _selectLines(with: invocation, range: range)
-    }
-    
-    /// select at range
-    private static func _selectLines(with invocation: XCSourceEditorCommandInvocation,
-                                     range: XCSourceTextRange) {
-        
-        // remove selection
-        invocation.buffer.selections.removeAllObjects()
-        
-        // select at range
-        invocation.buffer.selections.add(range)
     }
 }

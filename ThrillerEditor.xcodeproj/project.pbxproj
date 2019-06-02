@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C6F379822A357CE0093F298 /* LinesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F379722A357CE0093F298 /* LinesController.swift */; };
 		9C8A2A6C229EE27E00F58E80 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8A2A6B229EE27E00F58E80 /* AppDelegate.swift */; };
 		9C8A2A6E229EE27E00F58E80 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8A2A6D229EE27E00F58E80 /* ViewController.swift */; };
 		9C8A2A70229EE27F00F58E80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C8A2A6F229EE27F00F58E80 /* Assets.xcassets */; };
@@ -43,6 +44,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9C6F379722A357CE0093F298 /* LinesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinesController.swift; sourceTree = "<group>"; };
 		9C8A2A68229EE27E00F58E80 /* ThrillerEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThrillerEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C8A2A6B229EE27E00F58E80 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C8A2A6D229EE27E00F58E80 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				9CEA95F222A0310300ACCE44 /* SourceEditorExtension.swift */,
 				9CEA95F422A0310300ACCE44 /* SourceEditorCommand.swift */,
 				9C9E34CE22A2BDD700DBF176 /* EditorController.swift */,
+				9C6F379722A357CE0093F298 /* LinesController.swift */,
 				9CEA95F622A0310300ACCE44 /* Info.plist */,
 				9CEA95F722A0310300ACCE44 /* Editor.entitlements */,
 			);
@@ -242,6 +245,7 @@
 				9CEA95F322A0310300ACCE44 /* SourceEditorExtension.swift in Sources */,
 				9C9E34CF22A2BDD700DBF176 /* EditorController.swift in Sources */,
 				9CEA95F522A0310300ACCE44 /* SourceEditorCommand.swift in Sources */,
+				9C6F379822A357CE0093F298 /* LinesController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
