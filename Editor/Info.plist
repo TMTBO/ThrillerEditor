@@ -52,6 +52,14 @@
 					<key>XCSourceEditorCommandName</key>
 					<string>Copy Lines</string>
 				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>Thriller.Editor.ConvertJsonToModel</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Convert Json To Model</string>
+				</dict>
 			</array>
 			<key>XCSourceEditorExtensionPrincipalClass</key>
 			<string>$(PRODUCT_MODULE_NAME).SourceEditorExtension</string>

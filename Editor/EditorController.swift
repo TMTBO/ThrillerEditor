@@ -15,11 +15,13 @@ struct EditorController {
         case deleteLines = "Thriller.Editor.DeleteLines";
         case duplicateLines = "Thriller.Editor.DuplicateLines";
         case copyLines = "Thriller.Editor.CopyLines";
+        case convertJson = "Thriller.Editor.ConvertJsonToModel";
         
         // TODO: - sort import <>, "", oc, swift
         // TODO: - auto import anywhere
         // TODO: - generate sel interface oc, swift
         // TODO: - generate sel imp with select codes oc, swift
+        // TODO: - generate statement with select expression oc, swift
         
         // TODO: - common wapper
         // TODO: - blcok common
@@ -27,6 +29,7 @@ struct EditorController {
         // TODO: - alignment
         // TODO: - format
         
+        // TODO: - need comment or not
         // TODO: - convert json to model
         // TODO: - convert protobuf to model
     }
@@ -48,6 +51,8 @@ struct EditorController {
             LinesController.duplicateLines(with: invocation, at: range)
         case .copyLines:
             LinesController.copyLines(with: invocation, at: range)
+        case .convertJson:
+            ConvertController.convertJson(with: invocation, at: textRange)
         }
     }
 }

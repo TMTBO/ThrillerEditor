@@ -9,6 +9,7 @@
 import XcodeKit
 import AppKit
 
+/// Handle Lines
 struct LinesController {
     
     /// delete selected lines
