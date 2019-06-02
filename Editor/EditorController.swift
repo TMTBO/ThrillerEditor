@@ -15,6 +15,20 @@ class EditorController {
         case deleteLines = "Thriller.Editor.DeleteLines";
         case duplicateLines = "Thriller.Editor.DuplicateLines";
         case copyLines = "Thriller.Editor.CopyLines";
+        
+        // TODO: - sort import <>, "", oc, swift
+        // TODO: - auto import
+        // TODO: - generate sel interface oc, swift
+        // TODO: - generate sel imp with select codes oc, swift
+        
+        // TODO: - common wapper
+        // TODO: - blcok common
+
+        // TODO: - alignment
+        // TODO: - format
+        
+        // TODO: - convert json to model
+        // TODO: - convert protobuf to model
     }
     
     /// handle all editor command
