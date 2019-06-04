@@ -164,6 +164,12 @@ struct ConvertController {
             
             // insert
             invocation.buffer.lines.insert(interfaceString, at: insertLine)
+            
+            // select lines
+            let start = XCSourceTextPosition(line: insertLine, column: 0)
+            let end = XCSourceTextPosition(line: invocation.buffer.lines.count, column: 0)
+            let range = XCSourceTextRange(start: start, end: end)
+            LinesController.selectLines(with: invocation, range: range)
             return true
         }
         
