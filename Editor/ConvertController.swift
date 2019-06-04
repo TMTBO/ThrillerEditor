@@ -142,7 +142,7 @@ struct ConvertController {
             
             // properties
             let properties = lines
-                .filter({ !$0.hasSuffix("_:1;\n")
+                .filter({ !$0.contains("_:1;")
                     && !$0.hasPrefix("@")
                     && !$0.hasPrefix("{")
                     && !$0.hasPrefix("}")
@@ -189,8 +189,10 @@ struct ConvertController {
                                     at textRange: XCSourceTextRange) -> Bool {
             // get copied string
             guard let copiedString = NSPasteboard.general.string(forType: .string) else { return false }
+            let lines = copiedString.components(separatedBy: .newlines)
             
-            return true
+            // handle lines
+            return _handle(with: invocation, lines: lines)
         }
         
         // from selection
