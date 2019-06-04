@@ -34,7 +34,7 @@ struct ConvertController {
             var handled = false
             
             // convert to model
-            if let dict = obj as? Dictionary<NSString, AnyObject> {
+            if let dict = obj as? Dictionary<String, AnyObject> {
                 // class interface
                 var interfaceString = "\n@interface \(Const.className.rawValue) : NSObject\n\n"
                 // properties
@@ -102,9 +102,7 @@ struct ConvertController {
                                     at textRange: XCSourceTextRange) -> Bool {
             
             // get copied string
-            guard let copiedString = NSPasteboard.general.string(forType: .string) else {
-                    return false
-            }
+            guard let copiedString = NSPasteboard.general.string(forType: .string) else { return false }
             
             // handle json
             return _handleJsonString(with: invocation, json: copiedString)
@@ -121,34 +119,85 @@ struct ConvertController {
     internal static func convertProtobuf(with invocation: XCSourceEditorCommandInvocation,
                                          at textRange: XCSourceTextRange) {
         
-        // get selected lines
-        let lineRange = Range(uncheckedBounds: (textRange.start.line, min(textRange.end.line + 1, invocation.buffer.lines.count)))
-        let indexSet = IndexSet(integersIn: lineRange)
-        guard let selectedLines = invocation
-            .buffer
-            .lines
-            .objects(at: indexSet) as? [String],
-            selectedLines.count > 0 else { return }
+        /// handle json string
+        func _handle(with invocation: XCSourceEditorCommandInvocation,
+                     lines: [String]) -> Bool {
+            let insertLine = invocation.buffer.lines.count
+            
+            // get class name
+            guard var filteredClassName = lines.filter({ $0.hasPrefix("@interface") }).first,
+                filteredClassName.count > 0 else { return false }
+            
+            filteredClassName = filteredClassName.replacingOccurrences(of: " ", with: "")
+            guard let interfaceRange = filteredClassName.range(of: "@interface"),
+                let colonRange = filteredClassName.range(of: ":") else { return false }
+            
+            var className = String(filteredClassName[interfaceRange.upperBound..<colonRange.lowerBound])
+            guard let firstChar = className.first else { return false }
+            let upperChar = firstChar.uppercased()
+            className = className.replacingOccurrences(of: String(firstChar), with: upperChar)
+            
+            // class interface
+            var interfaceString = "\n@interface \(className) : NSObject\n\n"
+            
+            // properties
+            let properties = lines
+                .filter({ !$0.hasSuffix("_:1;\n")
+                    && !$0.hasPrefix("@")
+                    && !$0.hasPrefix("{")
+                    && !$0.hasPrefix("}")
+                })
+                .compactMap { (line) -> String? in
+                    let items =  line.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: " ")
+                    guard items.count == 2,
+                        let type = items.first,
+                        let name = items.last else { return nil }
+                    let property = _generateProperty(type: type, name: name.replacingOccurrences(of: ";", with: ""))
+                    return property
+                }.joined()
+            interfaceString.append(properties)
+            
+            // methods
+            
+            // class end
+            interfaceString.append("\n@end")
+            
+            // insert
+            invocation.buffer.lines.insert(interfaceString, at: insertLine)
+            return true
+        }
         
-        let insertLine = invocation.buffer.lines.count
+        /// convert from selection
+        func _convertFromSelection(with invocation: XCSourceEditorCommandInvocation,
+                                   at textRange: XCSourceTextRange) -> Bool {
+            
+            // get selected lines
+            let lineRange = Range(uncheckedBounds: (textRange.start.line, min(textRange.end.line + 1, invocation.buffer.lines.count)))
+            let indexSet = IndexSet(integersIn: lineRange)
+            guard let selectedLines = invocation
+                .buffer
+                .lines
+                .objects(at: indexSet) as? [String],
+                selectedLines.count > 0 else { return false }
+            
+            // handle lines
+            return _handle(with: invocation, lines: selectedLines)
+        }
+ 
+        /// convert form pasteboard
+        func _convertFromPasteboard(with invocation: XCSourceEditorCommandInvocation,
+                                    at textRange: XCSourceTextRange) -> Bool {
+            // get copied string
+            guard let copiedString = NSPasteboard.general.string(forType: .string) else { return false }
+            
+            return true
+        }
         
-        // get class name
-        guard let filteredClassName = selectedLines.filter({ $0.hasPrefix("@interface") }).first,
-            filteredClassName.count > 0,
-            let range = filteredClassName.range(of: "@interface +\\S+ +: +PBGeneratedMessage",
-                                                options: .regularExpression,
-                                                range: Range(uncheckedBounds: (filteredClassName.startIndex, filteredClassName.endIndex)),
-                                                locale: nil) else { return }
-        let className = filteredClassName[range]
+        // from selection
+        if _convertFromSelection(with: invocation, at: textRange) { return }
         
-        // class interface
-        var interfaceString = "\n@interface \(className) : NSObject\n\n"
-        
-        // class end
-        interfaceString.append("\n@end")
-        
-        invocation.buffer.lines.insert(interfaceString, at: insertLine)
-        
+        // from pasteboard
+        if _convertFromPasteboard(with: invocation, at: textRange) { return }
     }
 }
 
@@ -161,6 +210,7 @@ extension ConvertController {
         case NSInteger = "NSInteger "
         case CGFloat = "CGFloat ";
         case BOOL = "BOOL ";
+        case int = "int";
     }
     
     enum MemonryControl: String {
@@ -168,33 +218,49 @@ extension ConvertController {
     }
     
     /// generate property
-    internal static func _generateProperty(key: NSString, value: AnyObject) -> String {
+    internal static func _generateProperty(key: String, value: AnyObject) -> String {
         
-        let type = _typeString(key: key, value: value)
+        let type = _typeString(object: value)
         let memonryControl = _memonryControl(with: type)
         let property = String(format: "@property (nonatomic, %@) %@%@;\n", memonryControl, type, key)
+        return property
+    }
+    
+    internal static func _generateProperty(type: String, name: String) -> String {
+        
+        let type = _typeString(type: type)
+        let memonryControl = _memonryControl(with: type)
+        let property = String(format: "@property (nonatomic, %@) %@%@;\n", memonryControl, type, name)
         return property
     }
     
     /// memonry control for type
     internal static func _memonryControl(with type: String) -> String {
         
+        if type.hasPrefix(PropertyType.int.rawValue) { return MemonryControl.assign.rawValue }
+        
         guard let propertyType = PropertyType(rawValue: type) else { return MemonryControl.strong.rawValue }
         
         switch propertyType {
         case .NSString, .NSArray, .NSDictioary:
             return MemonryControl.copy.rawValue
-        case .NSInteger, .CGFloat, .BOOL:
+        case .NSInteger, .CGFloat, .BOOL, .int:
             return MemonryControl.assign.rawValue
         }
     }
     
-    /// type for item
-    internal static func _typeString(key: NSString, value: AnyObject) -> String {
+    /// type for type
+    internal static func _typeString(type: String) -> String {
         
-        var className = value.className ?? Const.className.rawValue
-        if className.lowercased().contains("number") {
-            let number = (value as? NSNumber)?.doubleValue ?? 0
+        if type.hasPrefix("int") { return type.appending(" ") }
+        return _correctTypeString(type: type)
+    }
+    
+    /// type for object
+    internal static func _typeString(object: AnyObject) -> String {
+        let type = object.className ?? Const.className.rawValue
+        if type.lowercased().contains("number") {
+            let number = (object as? NSNumber)?.doubleValue ?? 0
             if number == round(number) {
                 // equal to int value is integer
                 return PropertyType.NSInteger.rawValue
@@ -202,17 +268,23 @@ extension ConvertController {
                 // otherwise is double
                 return PropertyType.CGFloat.rawValue
             }
-        } else if className.lowercased().contains("bool") {
+        }
+        return _correctTypeString(type: type)
+    }
+    
+    /// correct type string
+    internal static func _correctTypeString(type: String) -> String {
+        
+        if type.lowercased().contains("bool") {
             return PropertyType.BOOL.rawValue
-        } else if className.lowercased().contains("string") {
+        } else if type.lowercased().contains("string") {
             return PropertyType.NSString.rawValue
-        } else if className.lowercased().contains("array") {
+        } else if type.lowercased().contains("array") {
             return PropertyType.NSArray.rawValue
-        } else if className.lowercased().contains("dictionary") {
+        } else if type.lowercased().contains("dictionary") {
             return PropertyType.NSDictioary.rawValue
         } else {
-            className.append(" *")
+            return type.appending(" *")
         }
-        return className
     }
 }
