@@ -56,6 +56,14 @@
 					<key>XCSourceEditorCommandClassName</key>
 					<string>$(PRODUCT_MODULE_NAME).SourceEditorCommand</string>
 					<key>XCSourceEditorCommandIdentifier</key>
+					<string>Thriller.Editor.BlockComment</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Block Comment</string>
+				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
 					<string>Thriller.Editor.ConvertJsonToModel</string>
 					<key>XCSourceEditorCommandName</key>
 					<string>Convert Json To Model</string>

@@ -15,6 +15,7 @@ struct EditorController {
         case deleteLines = "Thriller.Editor.DeleteLines";
         case duplicateLines = "Thriller.Editor.DuplicateLines";
         case copyLines = "Thriller.Editor.CopyLines";
+        case blockComment = "Thriller.Editor.BlockComment";
         case convertJson = "Thriller.Editor.ConvertJsonToModel";
         case convertProtobuf = "Thriller.Editor.ConvertProtobufToModel";
         
@@ -30,8 +31,10 @@ struct EditorController {
         // TODO: - alignment
         // TODO: - format
         
+        // TODO: - upper case
+        // TODO: - lower case
+        
         // TODO: - need comment or not
-        // TODO: - convert protobuf to model
         // TODO: - prefix support
     }
     
@@ -52,6 +55,8 @@ struct EditorController {
             LinesController.duplicateLines(with: invocation, at: range)
         case .copyLines:
             LinesController.copyLines(with: invocation, at: range)
+        case .blockComment:
+            LinesController.blockComment(with: invocation, at: range)
         case .convertJson:
             ConvertController.convertJson(with: invocation, at: textRange)
         case .convertProtobuf:

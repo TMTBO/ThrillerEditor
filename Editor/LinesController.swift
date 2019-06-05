@@ -35,7 +35,8 @@ struct LinesController {
         guard let selectedLines = invocation
             .buffer
             .lines
-            .objects(at: indexSet) as? [String] else { return }
+            .objects(at: indexSet) as? [String],
+            selectedLines.count > 0  else { return }
         
         // insert lines
         invocation.buffer.lines.insert(selectedLines, at: indexSet)
@@ -72,6 +73,44 @@ struct LinesController {
                                                column: (selectedLines.last?.count ?? 1) - 1)
         let range = XCSourceTextRange(start: startPosition, end: endPosition)
         selectLines(with: invocation, range: range)
+    }
+    
+    /// block comment
+    internal static func blockComment(with invocation: XCSourceEditorCommandInvocation,
+                                      at range: Range<Int>) {
+        
+        // get selected lines
+        let indexSet = IndexSet(integersIn: Range(uncheckedBounds: (range.lowerBound - 1, min(range.upperBound + 1, invocation.buffer.lines.count))))
+        guard var selectedLines = (invocation
+            .buffer
+            .lines
+            .objects(at: indexSet) as? [String])?
+            .filter({ $0.trimmingCharacters(in: .whitespaces) != "\n" }),
+            selectedLines.count > 0 else { return }
+        let hasStart = selectedLines.filter { $0.contains("/*") }.count > 0
+        let hasEnd = selectedLines.filter { $0.contains("*/") }.count > 0
+        
+        if hasStart && hasEnd {
+            // remove comment
+            selectedLines = selectedLines.map { (line) -> String in
+                if line.contains("/*") {
+                    return line.replacingOccurrences(of: "/*", with: "")
+                } else if line.contains("*/") {
+                    return line.replacingOccurrences(of: "*/", with: "")
+                }
+                return line
+            }
+        } else {
+            // add comment
+            selectedLines.insert("/*\n", at: 0)
+            selectedLines.insert("*/", at: selectedLines.count)
+        }
+        
+        let linesString = selectedLines.joined()
+        
+        // replace lines
+        invocation.buffer.lines.removeObjects(at: indexSet)
+        invocation.buffer.lines.insert(linesString, at: min(range.lowerBound, invocation.buffer.lines.count))
     }
     
     /// reset the selection at the begining of the selections
