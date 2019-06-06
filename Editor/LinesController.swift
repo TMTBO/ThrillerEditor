@@ -79,38 +79,61 @@ struct LinesController {
     internal static func blockComment(with invocation: XCSourceEditorCommandInvocation,
                                       at range: Range<Int>) {
         
-        // get selected lines
-        let indexSet = IndexSet(integersIn: Range(uncheckedBounds: (range.lowerBound - 1, min(range.upperBound + 1, invocation.buffer.lines.count))))
-        guard var selectedLines = (invocation
-            .buffer
-            .lines
-            .objects(at: indexSet) as? [String])?
-            .filter({ $0.trimmingCharacters(in: .whitespaces) != "\n" }),
-            selectedLines.count > 0 else { return }
-        let hasStart = selectedLines.filter { $0.contains("/*") }.count > 0
-        let hasEnd = selectedLines.filter { $0.contains("*/") }.count > 0
+        NSLog("wujie debu \(range.lowerBound) \(range.upperBound)")
+        var hasStart = false
+        var start = range.lowerBound
+        repeat {
+            guard let line = invocation.buffer.lines[start] as? String,
+                line.contains("/*") else {
+                start -= 1
+                continue
+            }
+            hasStart = true
+            break
+        } while start >= 0
+        
+        var hasEnd = false
+        var end = range.upperBound
+        repeat {
+            guard let line = invocation.buffer.lines[end - 1] as? String,
+                line.contains("*/") else {
+                    end += 1
+                    continue
+            }
+            hasEnd = true
+            break
+        } while end < invocation.buffer.lines.count
+        
+        NSLog("wujie debug \(hasStart) \(start) \(hasEnd) \(end)")
         
         if hasStart && hasEnd {
-            // remove comment
-            selectedLines = selectedLines.map { (line) -> String in
-                if line.contains("/*") {
-                    return line.replacingOccurrences(of: "/*", with: "")
-                } else if line.contains("*/") {
-                    return line.replacingOccurrences(of: "*/", with: "")
-                }
-                return line
+            // uncomment lines
+            let startLine = (invocation.buffer.lines[start] as! String).replacingOccurrences(of: "/*", with: "")
+            if startLine.count == 0 {
+                invocation.buffer.lines.removeObject(at: start)
+            } else {
+                invocation.buffer.lines[start] = startLine
             }
+            
+            let endLine = (invocation.buffer.lines[end] as! String).replacingOccurrences(of: "*/", with: "")
+            if endLine.count == 0 {
+                invocation.buffer.lines.removeObject(at: end)
+            } else {
+                invocation.buffer.lines[end] = endLine
+            }
+            NSLog("wujie debug delete \(start) \(end) \(invocation.buffer.lines)")
         } else {
-            // add comment
-            selectedLines.insert("/*\n", at: 0)
-            selectedLines.insert("*/", at: selectedLines.count)
+            // comment lines
+            start = range.lowerBound
+            end = range.upperBound
+            invocation.buffer.lines.insert("/*", at: start)
+            invocation.buffer.lines.insert("*/", at: end + 1)
+            
+            let startPosition = XCSourceTextPosition(line: end + 1, column: 0)
+            let endPosition = XCSourceTextPosition(line: end + 1, column: 2)
+            invocation.buffer.selections.add(XCSourceTextRange(start: startPosition, end: endPosition))
+            NSLog("wujie debug \(start) \(end) \(invocation.buffer.lines)")
         }
-        
-        let linesString = selectedLines.joined()
-        
-        // replace lines
-        invocation.buffer.lines.removeObjects(at: indexSet)
-        invocation.buffer.lines.insert(linesString, at: min(range.lowerBound, invocation.buffer.lines.count))
     }
     
     /// reset the selection at the begining of the selections
